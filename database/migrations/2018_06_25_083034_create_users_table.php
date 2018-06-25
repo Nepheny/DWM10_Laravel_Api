@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->text('name');
             $table->text('password');
+            // $table->boolean('connect')->default(0);
         });
     }
 

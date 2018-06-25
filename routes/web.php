@@ -15,13 +15,16 @@
 Route::post('/user/get', 'UserController@getOne');
 
 // To add a user
-Route::post('/user/insert', 'UserController@insertOne');
+Route::post('/user/insert', 'UserController@insert');
 
 // To delete a user
-Route::post('/user/delete', 'UserController@deleteOne');
+Route::post('/user/delete', 'UserController@delete');
 
 // To update a user
 Route::post('/user/update', 'UserController@updateOne');
+
+// Connection page
+Route::post('/user/connect', 'UserController@connect');
 
 // Home page
 Route::get('/', 'UserController@getAll');
