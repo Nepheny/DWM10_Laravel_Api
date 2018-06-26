@@ -11,20 +11,20 @@
 |
 */
 
-// To get a user
-Route::post('/user/get', 'UserController@getOne');
+// To get users
+Route::post('/user/find', 'UserController@getOne');
+Route::get('/users', 'UserController@getAll');
 
-// To add a user
-Route::post('/user/insert', 'UserController@insert');
+// To add users
+Route::post('/user/new', 'UserController@insertOne');
+Route::post('/users/new', 'UserController@insertMany');
 
-// To delete a user
-Route::post('/user/delete', 'UserController@delete');
+// To delete users
+Route::delete('/user', 'UserController@deleteOne');
+//Route::post('/user/delete', 'UserController@deleteMany');
 
-// To update a user
-Route::post('/user/update', 'UserController@updateOne');
+// To update users
+Route::post('/user/update/{id}', 'UserController@updateOne');
 
-// Connection page
+// To connect user
 Route::post('/user/connect', 'UserController@connect');
-
-// Home page
-Route::get('/', 'UserController@getAll');
