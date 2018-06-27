@@ -183,6 +183,7 @@ class UserController extends Controller
         */
     }
 
+    /*
     public function connect(Request $request)
     {
         $user = User::find($request->id);
@@ -198,4 +199,5 @@ class UserController extends Controller
             ], 400);
         }
     }
+    */
 }

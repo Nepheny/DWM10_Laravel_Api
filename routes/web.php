@@ -11,20 +11,19 @@
 |
 */
 
-// To get users
+// CRUD users
 Route::post('/user/find', 'UserController@getOne');
 Route::get('/users', 'UserController@getAll');
-
-// To add users
 Route::post('/user/new', 'UserController@insertOne');
 Route::post('/users/new', 'UserController@insertMany');
-
-// To delete users
 Route::delete('/user', 'UserController@deleteOne');
 //Route::post('/user/delete', 'UserController@deleteMany');
-
-// To update users
 Route::post('/user/update/{id}', 'UserController@updateOne');
-
 // To connect user
-Route::post('/user/connect', 'UserController@connect');
+// Route::post('/user/connect', 'UserController@connect');
+
+// CRUD roles
+Route::get('/roles', 'RoleController@getAll');
+Route::post('/role/new', 'RoleController@insertOne');
+Route::delete('/role', 'RoleController@deleteOne');
+Route::post('/role/update/{id}', 'RoleController@updateOne');
