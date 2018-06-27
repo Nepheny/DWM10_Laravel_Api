@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User as User;
-// use Illuminate\Support\Facades\DB; -> $user = DB::table('users')->where('id', $request->id)->first();
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function getAll()
     {
-        return User::all();
+        return User::all()->load('roles');
     }
 
     public function getOne(Request $request)
@@ -19,6 +18,7 @@ class UserController extends Controller
         if($request->input('id') !== null) {
             $user = User::find($request->input('id'));
             if($user !== null) {
+                $user->load('roles');
                 return $user;
             }
         }
@@ -26,21 +26,6 @@ class UserController extends Controller
             'error' => 'Cannot find user',
             'errorMessage' => 'Wrong data send inside request or no user match this id'
         ]);
-
-        /*
-        $user = User::find($request->input('id'));
-        if($user == null) {
-            return response([
-                'status' => 'error',
-                'msg'    => 'Invalid credentials'
-            ], 400);
-        } else {
-            return response([
-                'status' => 'success',
-                'data'   => $user
-            ], 200);
-        }
-        */
     }
 
     public function insertOne(Request $request)
@@ -53,9 +38,13 @@ class UserController extends Controller
                 $password = str_random(15);
                 $newUser->password = bcrypt($password);
                 $newUser->save();
+                $newUser->roles()->attach($request->input('role_id') !== null ? $request->input('role_id') : 5);
                 return response()->json([
                     'success' => 'New user inserted',
-                    'successMessage' => $password
+                    'successMessage' => [
+                        'password' => $password,
+                        'role'     => $newUser->roles[0]->role
+                    ]
                 ]);
             }
         }
@@ -89,20 +78,6 @@ class UserController extends Controller
             'error' => 'Cannot insert user',
             'errorMessage' => 'Syntax error, or the user already exists'
         ]);
-
-        /*
-        for($i = 0; $i < count($request->name); $i++) {
-            $user = new User;
-            $user->name = $request->name[$i];
-            $user->password = bcrypt($request->password[$i]);
-            $user->save();
-            $users[$i] = $user;
-        }
-        return response([
-            'status' => 'insert successfull',
-            'data'   => $users
-        ], 200);
-        */
     }
 
     public function deleteOne(Request $request)
@@ -123,28 +98,6 @@ class UserController extends Controller
         ]);
     }
 
-    /*
-    public function deleteMany(Request $request)
-    {
-        for($i = 0; $i < count($request->id); $i++){
-            $id = $request->id[$i];
-            $user = User::find($id);
-            if($user == null) {
-                return response([
-                    'status' => 'error',
-                    'msg'    => 'Invalid credentials'
-                ], 400);
-            } else {
-                User::destroy($request->id[$i]);
-            }
-        }
-        return response([
-            'status' => 'delete successfull',
-            'data'   => User::all()
-        ], 200);
-    }
-    */
-
     public function updateOne(Request $request, $id)
     {
         $name = $request->input('name');
@@ -164,40 +117,5 @@ class UserController extends Controller
             'error' => 'Cannot update user',
             'errorMessage' => 'Syntax error, or the user id doesn\'t exists'
         ]);
-        /*
-        $user = User::find($request->id);
-        if($user == null) {
-            return response([
-                'status' => 'error',
-                'msg'    => 'Invalid credentials'
-            ], 400);
-        } else {
-            $user->name = $request->name;
-            $user->password = bcrypt($request->password);
-            $user->save();
-            return response([
-                'status' => 'update successfull',
-                'data'   => $user
-            ], 200);
-        }
-        */
     }
-
-    /*
-    public function connect(Request $request)
-    {
-        $user = User::find($request->id);
-        if($request->name == $user->name && Hash::check($request->password, $user->password) == true) {
-            return response([
-                'status' => 'you are connected',
-                'data'   => $user
-            ], 200);
-        } else {
-            return response([
-                'status' => 'error',
-                'msg'    => 'Invalid name or password'
-            ], 400);
-        }
-    }
-    */
 }
