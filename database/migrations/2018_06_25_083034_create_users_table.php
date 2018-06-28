@@ -17,6 +17,8 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->mediumtext('name');
             $table->text('password');
+            $table->text('token')->nullable();
+            $table->dateTime('token_expiration')->nullable();
             $table->timestamps();
         });
     }

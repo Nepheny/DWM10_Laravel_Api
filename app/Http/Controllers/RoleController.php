@@ -21,7 +21,7 @@ class RoleController extends Controller
                 $newRole->save();
                 return response()->json([
                     'success' => 'New role inserted',
-                    'successMessage' => 'New role added'
+                    'successMessage' => ''
                 ]);
             }
         }
@@ -39,7 +39,7 @@ class RoleController extends Controller
                 $roleToDelete->delete();
                 return response()->json([
                     'success' => 'Role deleted',
-                    'successMessage' => 'Role deleted'
+                    'successMessage' => ''
                 ]);
             }
         }

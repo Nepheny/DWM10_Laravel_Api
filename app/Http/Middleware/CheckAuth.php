@@ -3,6 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use DateTime;
+use dateTimeZone;
+use App\User as User;
 
 class CheckAuth
 {
@@ -15,7 +18,19 @@ class CheckAuth
      */
     public function handle($request, Closure $next)
     {
-        dd('test');
-        return $next($request);
+        if($request->input('token') !== null) {
+            $user = User::where('token', $request->input('token'))->get()->first();
+            if($user !== null) {
+                $expirationToken = $user->token_expiration;
+                $currentDate = new DateTime('', new DateTimeZone('Europe/Paris'));
+                if($expirationToken > $currentDate->format('Y-m-d H:i:s')) {
+                    return $next($request);
+                }
+            }
+        }
+        return response()->json([
+            'error' => 'Authentication error',
+            'errorMessage' => 'Please reconnect'
+        ]);
     }
 }

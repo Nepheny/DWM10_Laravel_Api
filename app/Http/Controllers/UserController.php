@@ -10,7 +10,10 @@ class UserController extends Controller
 {
     public function getAll()
     {
-        return User::all()->load('roles');
+        return response()->json([
+            'success' => 'Users',
+            'successMessage' => User::all()->load('roles')
+        ]);
     }
 
     public function getOne(Request $request)
@@ -41,10 +44,7 @@ class UserController extends Controller
                 $newUser->roles()->attach($request->input('role_id') !== null ? $request->input('role_id') : 5);
                 return response()->json([
                     'success' => 'New user inserted',
-                    'successMessage' => [
-                        'password' => $password,
-                        'role'     => $newUser->roles[0]->role
-                    ]
+                    'successMessage' => $password
                 ]);
             }
         }
@@ -88,7 +88,7 @@ class UserController extends Controller
                 $userToDelete->delete();
                 return response()->json([
                     'success' => 'User deleted',
-                    'successMessage' => 'User deleted'
+                    'successMessage' => ''
                 ]);
             }
         }

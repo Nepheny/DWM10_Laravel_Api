@@ -25,3 +25,6 @@ Route::group(['middleware' => ['check.auth']], function () {
     Route::delete('/role', 'RoleController@deleteOne');
     Route::post('/role/update/{id}', 'RoleController@updateOne');
 });
+
+Route::post('/login', 'LoginController@login');
+Route::post('/logout', 'LoginController@logout');
